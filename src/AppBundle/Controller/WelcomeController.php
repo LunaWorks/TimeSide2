@@ -1,5 +1,5 @@
 <?php
-// src/AppBundle/Controller/ArticleController.php
+// src/AppBundle/Controller/WelcomeController.php
 
 namespace AppBundle\Controller;
 
@@ -7,14 +7,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-
-class ArticleController extends Controller
+class WelcomeController extends Controller
 {
     /**
-     * @Route("/article/{slug}", name="article_show")
+     * @Route("/", name="welcome")
      */
-    public function showAction($slug)
+    public function indexAction()
     {
+      // replace this example code with whatever you need
       return $this->render('default/index.html.twig', [
           'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
       ]);
