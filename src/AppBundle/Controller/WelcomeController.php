@@ -10,12 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 class WelcomeController extends Controller
 {
     /**
-     * @Route("/", name="welcome")
+     * @Route("welcome", name="welcome")
      */
-    public function indexAction()
+      public function indexAction(Request $request)
     {
       // replace this example code with whatever you need
-      return $this->render('default/index.html.twig', [
+      return $this->render('blog/index.html.twig', [
           'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
       ]);
     }

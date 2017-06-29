@@ -15,7 +15,7 @@ class ArticleController extends Controller
      */
     public function showAction($slug)
     {
-      return $this->render('default/index.html.twig', [
+      return $this->render('article/article_details.html.twig', [
           'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
       ]);
     }
