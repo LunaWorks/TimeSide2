@@ -14,9 +14,10 @@ class LuckyController
     {
         $service = new LuckyService();
         $number = $service->generateLuckyNumber();
+        $color = $service->generateLuckyColor();
 
         return new Response(
-            '<html><body>Lucky number: '.$number.'</body></html>'
+            '<html><body>Lucky number: '.$number.'</br>Random color: '.$color.'</body></html>'
         );
     }
 }
