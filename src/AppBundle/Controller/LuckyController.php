@@ -2,6 +2,7 @@
 // src/AppBundle/Controller/LuckyController.php
 namespace AppBundle\Controller;
 
+use AppBundle\Service\LuckyService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 class LuckyController
@@ -11,7 +12,8 @@ class LuckyController
      */
     public function numberAction()
     {
-        $number = mt_rand(0, 100);
+        $service = new LuckyService();
+        $number = $service->generateLuckyNumber();
 
         return new Response(
             '<html><body>Lucky number: '.$number.'</body></html>'
