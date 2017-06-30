@@ -1,6 +1,0 @@
-{# app/Resources/views/article/recent_list.html.twig #}
-{% for article in articles %}
-    <a href="{{ path('article_show', {'slug': article.slug}) }}">
-        {{ article.title }}
-    </a>
-{% endfor %}
