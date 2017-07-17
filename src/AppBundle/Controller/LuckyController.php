@@ -15,9 +15,10 @@ class LuckyController
     {
         $service = new LuckyService();
         $model = new UserViewModel();
-
+        $model->number = $service->generateLuckyNumber();
+        $model->color = $service->generateLuckyNumber();
         return new Response(
-            '<html><body>Lucky number: '.$model->number = $service->generateLuckyNumber().'</br>Random color: '.$model->color = $service->generateLuckyNumber().'</body></html>'
+            '<html><body>Lucky number: '.$model->number.'</br>Random color: '.$model->color.'</body></html>'
         );
     }
 }
