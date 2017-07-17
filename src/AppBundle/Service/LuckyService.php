@@ -10,9 +10,9 @@ class LuckyService
   }
 
   public function generateLuckyColor(){
-    $r = rand(128,255);
-      $g = rand(128,255);
-      $b = rand(128,255);
+      $r = rand(0,255);
+      $g = rand(0,255);
+      $b = rand(0,255);
       $color = dechex($r) . dechex($g) . dechex($b);
       return "#".$color;
   }
