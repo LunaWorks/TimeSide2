@@ -14,7 +14,8 @@ class LuckyController
     public function numberAction()
     {
         $service = new LuckyService();
-        $model = new UserViewModel();
+        $number = $service->generateLuckyNumber();
+        $color = $service->generateLuckyColor();
 
         return new Response(
             '<html><body>Lucky number: '.$model->number = $service->generateLuckyNumber().'</br>Random color: '.$model->color = $service->generateLuckyNumber().'</body></html>'
