@@ -5,8 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Service\LuckyService;
 use AppBundle\Model\UserViewModel;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Response;
-class LuckyController
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+class LuckyController extends Controller
 {
     /**
      * @Route("/lucky/number")
@@ -15,10 +15,13 @@ class LuckyController
     {
         $service = new LuckyService();
         $model = new UserViewModel();
+        
         $model->number = $service->generateLuckyNumber();
-        $model->color = $service->generateLuckyNumber();
-        return new Response(
-            '<html><body>Lucky number: '.$model->number.'</br>Random color: '.$model->color.'</body></html>'
-        );
+        $model->color = $service->generateLuckyColor();
+  
+         return $this->render('lucky/number.html.twig', array(
+                 'model' => $model,
+            ));
+       
     }
 }
