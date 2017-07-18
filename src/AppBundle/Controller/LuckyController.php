@@ -18,6 +18,7 @@ class LuckyController extends Controller
         
         $model->number = $service->generateLuckyNumber();
         $model->color = $service->generateLuckyColor();
+
   
          return $this->render('lucky/number.html.twig', array(
                  'model' => $model,
