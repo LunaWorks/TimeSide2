@@ -9,24 +9,23 @@ class TimeService {
         return date();
     }
 
-    public function calcDifference($day1, $month1, $year1, $day2, $month2, $year2) {
+    public function calcDifference($start, $end) {
 
-        $today = date($day - $month1 - $year1);
-        $givenDate = date($year2 - $month2 - $day2);
-        $dateDiff = $givenDate - $today;
+        $diff = $end - $start;
 
-        return $dateDiff;
+        return $diff;
     }
 
-    public function formatDateTime() {
+    public function formatDateTime($timestamp) {
 
-        $date = now();
-        return date_format($date, 'Y.m.d H:i:s');
+        return date("Y.m.d h:i:s", mktime($timestamp));
     }
 
-    public function formatDifference() {
+    public function formatDifference($start, $end) {
 
-        return "";
+        $diff = $end - $start;
+
+        return date("h:i:s", mktime($diff));
     }
 
 }
