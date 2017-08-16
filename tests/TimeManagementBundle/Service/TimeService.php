@@ -11,9 +11,7 @@ class TimeService {
 
     public function calcDifference($start, $end) {
 
-        $diff = $end - $start;
-
-        return $diff;
+        return $end - $start;
     }
 
     public function formatDateTime($timestamp) {
@@ -23,7 +21,7 @@ class TimeService {
 
     public function formatDifference($start, $end) {
 
-        return date("h:i:s", mktime($end - $start));
+        return date("h:i:s", mktime(calcDifference($start, $end)));
     }
 
 }
