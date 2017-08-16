@@ -23,9 +23,7 @@ class TimeService {
 
     public function formatDifference($start, $end) {
 
-        $diff = $end - $start;
-
-        return date("h:i:s", mktime($diff));
+        return date("h:i:s", mktime($end - $start));
     }
 
 }
