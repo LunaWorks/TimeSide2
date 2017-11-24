@@ -60,8 +60,9 @@ class TimeController extends Controller
     public function getResult($start) {
         $this->time = $start;
         $date2 = new DateTime();
+        $this->time2 = $date2->getTimestamp();
 
-        $result =  $this->service->formatDifference($this->time, $date2->getTimestamp());
+        $result =  $this->service->formatDifference($this->time, $this->time2);
 
         return $this->render('time/time.html.twig', array(
             'time' =>  $this->time,
