@@ -11,40 +11,55 @@ class TimeController extends Controller
 {
     private $time;
     private $time2;
-
+    private $service;
+    
+    public function __construct(){
+          $this->service = new TimeService();
+    }
+            
+   
     /**
      * @Route("/time/start")
      */
     public function start() {
-        $result = 0;
         $date = new DateTime();
-        return $this->render('time/time.html.twig', array(
-            'time' =>$this->time = $date->getTimestamp(), 
-            'time2' =>$this->time2 = $date->getTimestamp(),
-            'result' => $result    
-        ));
-    }
-    /**
-     * @Route("/time/stop")
-     */
-    public function stop() {
+        $this->time = $date->getTimestamp();
+        $this->time2 = null;
         $result = 0;
-        $date2 = new DateTime();
+        
         return $this->render('time/time.html.twig', array(
             'time' =>$this->time = $date->getTimestamp(), 
-            'time2' =>$this->time2 = $date->getTimestamp(),
-            'result' => $result    
+            'time2' =>$this->time2,
+            'result' => $this->service->formatDateTime($result)    
         ));
     }
     /**
-     * @Route("/time/split")
+     * @Route("/time/stop/{start}")
      */
-    public function getResult() {
-        $service = new TimeService();
+    public function stop($start) {
+        $this->time = $start;
+        $date2 = new DateTime();
+        $this->time2 = $date2->getTimestamp();
+        $result =  $this->service->calcDifference($this->time, $this->time2);
         return $this->render('time/time.html.twig', array(
             'time' =>$this->time, 
             'time2' =>$this->time2,
-            'result' => $result = $service->calcDifference($this->time,$this->time2)
+            'result' => $this->service->formatDateTime($result)    
+        ));
+    }
+    /**
+     * @Route("/time/split/{start}")
+     */
+    public function getResult($start) {
+        $this->time = $start;
+        $date2 = new DateTime();
+        $this->time2 = $date2->getTimestamp();
+        $result =  $this->service->calcDifference($this->time, $this->time2);
+        
+        return $this->render('time/time.html.twig', array(
+            'time' =>$this->time, 
+            'time2' =>$this->time2,
+            'result' => $this->service->formatDateTime($result)    
         ));
     }
 }
