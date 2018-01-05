@@ -1,0 +1,16 @@
+# Common
+language: php
+php:
+  - '5.5'
+
+# Deployment
+branches:
+  only:
+    - master
+    - infrastructure
+env:
+  global:
+    - "FTP_USER=timeside_travisC"
+    - "FTP_PASSWORD=DeployTimeside"
+after_success:
+    "curl --ftp-create-dirs -T * -u $FTP_USER:$FTP_PASSWORD ftp.s5.domain-ellenorzes.hu"
