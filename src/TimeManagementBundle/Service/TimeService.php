@@ -1,6 +1,6 @@
 <?php
 
-namespace TimeManagementBundle\Tests\Controller\Service;
+namespace TimeManagementBundle\Service;
 
 class TimeService {
 
@@ -14,14 +14,12 @@ class TimeService {
         return $end - $start;
     }
 
-    public function formatDateTime($timestamp) {
-
-        return date("Y.m.d h:i:s", mktime($timestamp));
+     public function formatDateTime($timestamp) {
+        return date("H:i:s", $timestamp);
     }
-
+    
     public function formatDifference($start, $end) {
-
-        return date("h:i:s", mktime(calcDifference($start, $end)));
+        return date("H:i:s", $this->calcDifference($start, $end));
     }
 
 }

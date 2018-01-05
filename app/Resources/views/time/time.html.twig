@@ -1,0 +1,42 @@
+{# app/Resources/views/time/time.html.twig #} 
+
+ <html lang="en">
+<head>
+  <title>Stop watch</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>Stop watch</h1>
+  <p>This is a stop watch. Click the START button to start the stopper. Click the SPLIT button for getting a split time. Click the STOP button to stop the timer</p> 
+   
+    <a href="/time/start" id="start" class="btn btn-success btn-lg">Start</a>
+    <a href="/time/stop/{{ time }}" id="stop" class="btn btn-danger btn-lg">Stop</a>
+    <a href="/time/split/{{ time }}" id="split" class="btn btn-primary btn-lg">Split</a>
+</div> 
+     
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3">
+          <h3>Started time:</h3>
+          <p>{{ time }}</p>
+        </div>
+
+        <div class="col-sm-3">
+          <h3>Split time:</h3>        
+          <p>{{ time2 }}</p>
+        </div>
+         <div class="col-sm-3">
+          <h3>Result:</h3>        
+          <p>{{ result }}</p>
+        </div>
+      </div>
+
+    </div>
+ </body>
+</html>
