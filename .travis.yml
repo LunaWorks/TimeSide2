@@ -2,7 +2,9 @@
 language: php
 php:
   - '5.5'
-
+before_script:
+  - phpenv config-rm xdebug.ini
+  - composer install --no-interaction
 # Deployment
 branches:
   only:
