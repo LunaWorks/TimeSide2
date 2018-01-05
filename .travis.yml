@@ -6,7 +6,6 @@ php:
 # Deployment
 branches:
   only:
-    - master
     - infrastructure
 env:
   global:
