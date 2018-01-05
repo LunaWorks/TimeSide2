@@ -15,6 +15,22 @@ class TimeController extends Controller
     public function __construct(){
           $this->service = new TimeService();
     }
+    
+      /**
+     * @Route("/time")
+     */
+    public function index() {
+        $date = new DateTime();
+        $this->time = null;
+        $this->time2 = null;
+        $result = 0;
+        
+        return $this->render('time/time.html.twig', array(
+            'time' =>$this->time, 
+            'time2' =>$this->time2,
+            'result' => $this->service->formatDateTime($result)    
+        ));
+    }
             
    
     /**
@@ -27,7 +43,7 @@ class TimeController extends Controller
         $result = 0;
         
         return $this->render('time/time.html.twig', array(
-            'time' =>$this->time = $date->getTimestamp(), 
+            'time' =>$this->time,
             'time2' =>$this->time2,
             'result' => $this->service->formatDateTime($result)    
         ));
