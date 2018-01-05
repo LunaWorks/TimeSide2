@@ -17,6 +17,7 @@ class TimeService {
     public function formatDateTime($timestamp) {
 
         return date("h:m:s", mktime($timestamp));
+        
     }
 
     public function formatDifference($start, $end) {

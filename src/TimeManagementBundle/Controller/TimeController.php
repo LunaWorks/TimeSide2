@@ -1,5 +1,4 @@
 <?php
-
 namespace TimeManagementBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
