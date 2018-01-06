@@ -7,9 +7,6 @@ before_script:
   - phpenv config-rm xdebug.ini
   - composer install --no-interaction
 # Deployment
-branches:
-  only:
-    - infrastructure
 deploy:
   provider: heroku
   api_key:
