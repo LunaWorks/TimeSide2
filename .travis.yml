@@ -1,0 +1,14 @@
+# Common
+language: php
+php:
+  - '7.1'
+env:
+before_script:
+  - phpenv config-rm xdebug.ini
+  - composer install --no-interaction
+# Deployment
+deploy:
+  provider: heroku
+  api_key:
+    secure: $HEROKU_API_KEY
+  app: timeside2
