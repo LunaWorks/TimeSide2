@@ -11,10 +11,8 @@
 </head>
 <body>
   <h2>Update data:</h2>
-{{ form_start(form, {'attr': {'class': 'my-form-class'} }) }}
-<input type="text" value="{{ job_name }}" />
-    {{ form_widget(form) }}
-    
+    {{ form_start(form, {'attr': {'class': 'my-form-class'} }) }}
+      {{ form_widget(form) }}
     {{ form_end(form) }}
     
 </body>

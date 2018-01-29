@@ -2,16 +2,18 @@
 
 namespace jobBundle\Controller;
 
+//Basic Symfony routes
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
     
+// For database operations
 use jobBundle\Entity\Entity\jobEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 
+// Form types
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class JobController extends Controller
@@ -21,7 +23,8 @@ class JobController extends Controller
      /**
      * @Route("/job")
      */
-    public function index(){
+    public function index()
+    {
       
       return $this->render('job/job.html.twig');
   
@@ -32,21 +35,22 @@ class JobController extends Controller
     /**
      * @Route("job/job_select")
      */
-    public function allJob(){
+    public function getJobs()      
+    {
 
         $em = $this->getDoctrine()->getManager();
         $repository = $this->getDoctrine()
       ->getRepository(jobEntity::class);
 
        $query = $em->createQuery(
-          'SELECT j.name,j.id
+         'SELECT j.name,j.id
           FROM jobBundle\Entity\Entity\jobEntity j ORDER BY j.id'
-      );
+         );
       $jobs = $query->getResult();
       
       return $this->render('job/job_select.html.twig', array(
             'jobs' => $jobs
-          ));
+      ));
     }
     
     // The user can add new job types to the database.
@@ -60,7 +64,7 @@ class JobController extends Controller
 
        $form = $this->createFormBuilder()
         ->add('name', TextType::class)
-        ->add('Új munka felvétele', SubmitType::class)
+        ->add('Felvesz', SubmitType::class)
         ->getForm();
        
         $form->handleRequest($request);
@@ -81,22 +85,16 @@ class JobController extends Controller
                'Job added'
             );
          
-         return $this->redirectToRoute("job_select");
+         return $this->redirectToRoute("job_job_getjobs");
         }
         
         return $this->render('job/job_new.html.twig', array(
             'form' => $form->createView()
-          ));
+        ));
         
     }
-
-    // if you have multiple entity managers, use the registry to fetch them
-    public function editAction()
-    {
-        $doctrine = $this->getDoctrine();
-        $em = $doctrine->getManager();
-        $em2 = $doctrine->getManager('other_connection');
-    }
+    
+    // Find a job by its id, if it is already in database
     
      /**
      * @Route("job/job_search")
@@ -108,7 +106,7 @@ class JobController extends Controller
 
        $form = $this->createFormBuilder()
         ->add('id', TextType::class)
-        ->add('Keresés', SubmitType::class)
+        ->add('Keres', SubmitType::class)
         ->getForm();
        
         $form->handleRequest($request);
@@ -121,31 +119,28 @@ class JobController extends Controller
            ->getRepository(jobEntity::class)
            ->find($id);
             
-               if (!$job) {
-           return new Response('Nincs ilyen id, hogy '.$id );
-        } else {
-            $job_name = $job->getName();
-             return new Response('Van ilyen id , '. $id. ' Neve: '. $job_name   );
-        }
-            
-             $this->addFlash(
-               'notice',
-               'Job added'
-            );
-         
-         return $this->redirectToRoute("job_select");
+           if (!$job) {
+                return new Response('Nincs ilyen id, hogy '.$id );
+              } else {
+                 $job_name = $job->getName();
+                return new Response('Van ilyen id , '. $id. ' Neve: '. $job_name   );
+           }
+        
         }
         
         return $this->render('job/job_search.html.twig', array(
             'form' => $form->createView()
-          ));
+         ));
             
     }
+    
+     // Select all of the jobs, and select for update the name of the job
     
       /**
      * @Route("job/job_update")
      */
-    public function updateAction(Request $reguest)
+
+    public function getJobsForUpdate(Request $reguest)
     {
  
          $em = $this->getDoctrine()->getManager();
@@ -165,6 +160,8 @@ class JobController extends Controller
           ));
     }
     
+    // Update the job name 
+    
      /**
      * @Route("job/job_update/{job_id}")
      */
@@ -176,35 +173,31 @@ class JobController extends Controller
            ->getRepository(jobEntity::class)
            ->find($job_id);
             
-               if (!$jobs) {
+       if (!$jobs) {
            return new Response('Nincs ilyen id, hogy '.$job_id );
         } else {
-       
-          
-     $form = $this->createFormBuilder()
-        ->add('Update', SubmitType::class)
-        ->getForm();
+      
+        $form = $this->createFormBuilder()
+           ->add('name', TextType::class)
+           ->add('Update', SubmitType::class)
+           ->getForm();
   
-             $job_name = $jobs->getName();
-          
+        $name = $form['name']->setData($jobs->getName());
         
-
         $form->handleRequest($request);
         
-         if($form->isSubmitted() && $form->isValid()){
-            
-        $jobs->setName($job_name);
-        $em->flush();
-        
+            if($form->isSubmitted() && $form->isValid()){
+
+            $name = $form['name']->getData();
+            $jobs->setName($name);
+            $em->flush();
+
+            return new Response('Frissités sikeres volt!');
+            }
          
-         return new Response('Frissités sikeres volt!');
-      }
-       return $this->render('job/job_update_id.html.twig', array(
-            'job_name' => $job_name,
-            'form' => $form->createView()
+         return $this->render('job/job_update_id.html.twig', array(
+             'form' => $form->createView()
           ));
         }
-        
-        
-    }
+    } 
 }
