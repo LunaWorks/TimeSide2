@@ -38,18 +38,12 @@ class JobController extends Controller
     public function getJobs()      
     {
 
-        $em = $this->getDoctrine()->getManager();
         $repository = $this->getDoctrine()
-      ->getRepository(jobEntity::class);
+                           ->getRepository(jobEntity::class)
+                           ->findAll();
 
-       $query = $em->createQuery(
-         'SELECT j.name,j.id
-          FROM jobBundle\Entity\Entity\jobEntity j ORDER BY j.id'
-         );
-      $jobs = $query->getResult();
-      
       return $this->render('job/job_select.html.twig', array(
-            'jobs' => $jobs
+            'jobs' => $repository
       ));
     }
     
@@ -143,20 +137,12 @@ class JobController extends Controller
     public function getJobsForUpdate(Request $reguest)
     {
  
-         $em = $this->getDoctrine()->getManager();
-        $repository = $this->getDoctrine()
-      ->getRepository(jobEntity::class);
-
-       $query = $em->createQuery(
-          'SELECT j.name,j.id
-          FROM jobBundle\Entity\Entity\jobEntity j ORDER BY j.id'
-      );
-      $jobs = $query->getResult();
-      
-     
-      // return $this->redirectToRoute('index');
+          $repository = $this->getDoctrine()
+                           ->getRepository(jobEntity::class)
+                           ->findAll();
+          
          return $this->render('job/job_update.html.twig', array(
-            'jobs' => $jobs
+            'jobs' => $repository
           ));
     }
     
