@@ -18,9 +18,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class JobController extends Controller
 {
-    // Thte main menu of the job site.
     
      /**
+      * 
+      * Thte main menu of the job site.
+      * 
      * @Route("/job")
      */
     public function index()
@@ -30,27 +32,29 @@ class JobController extends Controller
   
     }
     
-    // Select everything from database ordered by the id.
-    
     /**
+     * 
+     * Select everything from database ordered by the id.
+     * 
      * @Route("job/job_select")
      */
     public function getJobs()      
     {
 
-        $repository = $this->getDoctrine()
+        $getJobs = $this->getDoctrine()
                            ->getRepository(jobEntity::class)
                            ->findAll();
 
       return $this->render('job/job_select.html.twig', array(
-            'jobs' => $repository
+            'jobs' => $getJobs
       ));
     }
-    
-    // The user can add new job types to the database.
 
-     /**
-     * @Route("job/job_new")
+     /** 
+      * 
+      * The user can add new job types to the database.
+      * 
+      * @Route("job/job_new")
      */
     public function addJob(Request $request)
     {
@@ -88,10 +92,12 @@ class JobController extends Controller
         
     }
     
-    // Find a job by its id, if it is already in database
     
      /**
-     * @Route("job/job_search")
+      * 
+      * Find a job by its id, if it is already in database.
+      * 
+      * @Route("job/job_search")
      */
     
     public function getJob(Request $request)
@@ -128,28 +134,32 @@ class JobController extends Controller
             
     }
     
-     // Select all of the jobs, and select for update the name of the job
-    
       /**
-     * @Route("job/job_update")
+       * 
+       * Select all of the jobs, and select for update the name of the job.
+       * 
+       * @Route("job/job_update")
      */
 
     public function getJobsForUpdate(Request $reguest)
     {
  
-          $repository = $this->getDoctrine()
+          $getJobs = $this->getDoctrine()
                            ->getRepository(jobEntity::class)
                            ->findAll();
           
          return $this->render('job/job_update.html.twig', array(
-            'jobs' => $repository
+            'jobs' => $getJobs
           ));
     }
     
-    // Update the job name 
+    
     
      /**
-     * @Route("job/job_update/{job_id}")
+      * 
+      * Update the job name.
+      * 
+      * @Route("job/job_update/{job_id}")
      */
     public function updateJob($job_id,Request $request)
     {
