@@ -17,6 +17,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
             new TimeManagementBundle\TimeManagementBundle(),
+            new jobBundle\jobBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
