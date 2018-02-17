@@ -1,6 +1,7 @@
 <?php
 
 $url = getenv('CLEARDB_DATABASE_URL');
+$url = 'mysql://b091b5494a6413:9b763d86@eu-cdbr-west-02.cleardb.net/heroku_eb14d0b615aa99b?reconnect=true';
 $db = parse_url($url);
 
 $container->setParameter('database_driver', 'pdo_mysql');
