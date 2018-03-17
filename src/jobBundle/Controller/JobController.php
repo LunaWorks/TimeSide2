@@ -3,6 +3,7 @@
 namespace jobBundle\Controller;
 
 //Basic Symfony routes
+use jobBundle\Service\JobService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,17 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class JobController extends Controller
 {
-    
+    private $jobService = null;
+
+    /**
+     * JobController constructor.
+     * @param JobService $service
+     */
+    public function __construct(JobService $service)
+    {
+        $this->jobService = $service;
+    }
+
      /**
       * 
       * Thte main menu of the job site.
@@ -50,46 +61,45 @@ class JobController extends Controller
       ));
     }
 
-     /** 
-      * 
-      * The user can add new job types to the database.
-      * 
-      * @Route("job/job_new")
+    /**
+     *
+     * The user can add new job types to the database.
+     *
+     * @Route("job/job_new")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function addJob(Request $request)
     {
-        $job = new jobEntity();
+        $success = false;
 
-       $form = $this->createFormBuilder()
-        ->add('name', TextType::class)
-        ->add('Felvesz', SubmitType::class)
-        ->getForm();
-       
+        // Creating form
+        $form = $this->createFormBuilder()
+            ->add('name', TextType::class)
+            ->add('Felvesz', SubmitType::class)
+            ->getForm();
+
+        // Process request into form
         $form->handleRequest($request);
-        
-        if($form->isSubmitted() && $form->isValid()){
-            
-            $name = $form['name']->getData();
-            
-            $job->setName($name);
-            
-             $em = $this->getDoctrine()->getManager();
-             
-             $em->persist($job);
-             $em->flush();
-             
-             $this->addFlash(
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Do the business logic
+            $success = $this->jobService->addJob($form);
+        }
+
+        // Render templates depending on previous actions
+        if($success) {
+            $this->addFlash(
                'notice',
                'Job added'
             );
-         
-         return $this->redirectToRoute("job_job_getjobs");
+            return $this->redirectToRoute("job_job_getjobs");
+        } else {
+            return $this->render(
+                'job/job_new.html.twig', array(
+                'form' => $form->createView()
+            ));
         }
-        
-        return $this->render('job/job_new.html.twig', array(
-            'form' => $form->createView()
-        ));
-        
     }
     
     
