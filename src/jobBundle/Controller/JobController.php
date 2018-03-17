@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 // For database operations
 use jobBundle\Entity\Entity\jobEntity;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\EntityManagerInterface;
 
 // Form types
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -62,8 +61,9 @@ class JobController extends Controller
     }
 
     /**
-     *
      * The user can add new job types to the database.
+     *
+     * TODO: Split form generation and form processing to two separate action.
      *
      * @Route("job/job_new")
      * @param Request $request
