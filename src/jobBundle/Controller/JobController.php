@@ -19,7 +19,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class JobController extends Controller
 {
+    /**
+     * @var jobService
+     */
     private $jobService = null;
+    
     /**
      * JobController constructor.
      * @param JobService $service
@@ -37,9 +41,7 @@ class JobController extends Controller
      */
     public function index()
     {
-      
       return $this->render('job/job.html.twig');
-  
     }
     
     /**
@@ -48,15 +50,12 @@ class JobController extends Controller
      * 
      * @Route("job/job_select")
      */
-        public function getJobs()      
-    {
-        $getJobs = $this->getDoctrine()
-                           ->getRepository(jobEntity::class)
-                           ->findAll();
+     public function getJobs()      
+     {
       return $this->render('job/job_select.html.twig', array(
-            'jobs' => $getJobs
+            'jobs' => $this->jobService->getAllJobs()
       ));
-    }
+     }
 
     /**
      * The user can add new job types to the database.
@@ -69,20 +68,14 @@ class JobController extends Controller
      */
     public function addJob(Request $request)
     {
-        $success = false;
         // Creating form
-        $form = $this->createFormBuilder()
-            ->add('name', TextType::class)
-            ->add('Felvesz', SubmitType::class)
-            ->getForm();
+        $form = $this->formGeneration();
+        
         // Process request into form
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Do the business logic
-            $success = $this->jobService->addJob($form);
-        }
+        
         // Render templates depending on previous actions
-        if($success) {
+        if($this->formProcess($form)) {
             $this->addFlash(
                'notice',
                'Job added'
@@ -96,17 +89,41 @@ class JobController extends Controller
         }
     }
     
+    /**
+     * @return Form $form
+     */
+    public function formGeneration()
+    {
+       return $this->createFormBuilder()
+            ->add('name', TextType::class)
+            ->add('Felvesz', SubmitType::class)
+            ->getForm();
+    }
+    
+    /**
+     * @param Form $form
+     * @return bool
+     */
+    public function formProcess($form)
+    {
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Do the business logic
+            return $this->jobService->addJob($form);
+        }  
+        return false;
+    }
     
      /**
       * 
       * Find a job by its id, if it is already in database.
       * 
       * @Route("job/job_search")
+      * @param Request $request
+      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     
     public function getJob(Request $request)
     {
-       $job = new jobEntity();
 
        $form = $this->createFormBuilder()
         ->add('id', TextType::class)
@@ -115,50 +132,40 @@ class JobController extends Controller
        
         $form->handleRequest($request);
         
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Do the business logic
+         
+          
+        // Render templates depending on previous actions
+            $this->addFlash(
+               'notice',
+               'Job found'
+            );
             
-            $id = $form['id']->getData();
-            
-            $job = $this->getDoctrine()
-           ->getRepository(jobEntity::class)
-           ->find($id);
-            
-           if (!$job) {
-                return new Response('Nincs ilyen id, hogy '.$id );
-              } else {
-                 $job_name = $job->getName();
-                return new Response('Van ilyen id , '. $id. ' Neve: '. $job_name   );
-           }
-        
-        }
-        
-        return $this->render('job/job_search.html.twig', array(
+            // Do the business logic
+             return $this->jobService->getJob($form);
+        } else {
+        return $this->render(
+            'job/job_search.html.twig', array(
             'form' => $form->createView()
          ));
-            
-    }
+        }
+    } 
     
       /**
        * 
        * Select all of the jobs, and select for update the name of the job.
-       * 
        * @Route("job/job_update")
+       * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-
-    public function getJobsForUpdate(Request $reguest)
+    public function getJobsForUpdate()
     {
- 
-          $getJobs = $this->getDoctrine()
-                           ->getRepository(jobEntity::class)
-                           ->findAll();
-          
          return $this->render('job/job_update.html.twig', array(
-            'jobs' => $getJobs
+            'jobs' => $this->jobService->getJobsForUpdate()
           ));
     }
-    
-    
-    
+       
+    // THIS FUNCTION IS INCLUDED TO THE LAST TASK.(NOT YET FINISHED)
      /**
       * 
       * Update the job name.
