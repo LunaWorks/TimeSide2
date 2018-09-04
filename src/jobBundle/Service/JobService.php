@@ -62,7 +62,7 @@ class JobService {
      * @param int $job_id
      * @return jobEntity
      */
-    public function getJobName($job_id) 
+    public function retriveJobById($job_id) 
     {
         return $this->em->getRepository(jobEntity::class)->find($job_id);
     }
@@ -79,24 +79,10 @@ class JobService {
     }
 
     /**
-     * @param int $id
-     * @return bool
-     */
-    public function findJob($id) 
-    {
-        $job = $this->em->getRepository(jobEntity::class)->Find($id);
-        if ($job) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * @param jobEntity $job
      * @return bool
      */
-    public function deleteJob($job) 
+    public function removeById($job) 
     {
         $this->em->remove($job);
         $this->em->flush();

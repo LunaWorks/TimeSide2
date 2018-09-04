@@ -159,16 +159,15 @@ class JobController extends Controller {
      */
     public function updateJob(Request $request, $job_id) {
         // If the id doesn't exist in the database
-        if (!$this->jobService->findJob($job_id)) {
+            $jobs = $this->jobService->retriveJobById($job_id);
+        if ($jobs == null) {
 
             return $this->render(
                             'job/job_error.html.twig', array(
                         'data' => $job_id
             ));
         } else {
-            // Do the business logic
-            $jobs = $this->jobService->getJobName($job_id);
-
+            
             $form = $this->createFormBuilder()
                     ->add('name', TextType::class)
                     ->add('Update', SubmitType::class)
@@ -214,7 +213,7 @@ class JobController extends Controller {
      * @Route("job/job_delete/{job_id}")
      */
     public function deleteJob($job_id) {
-        if (!$this->jobService->findJob($job_id)) {
+        if ($this->jobService->retriveJobById($job_id) == null) {
             // If the id doesn't exist in the database
             return $this->render(
                             'job/job_error.html.twig', array(
@@ -222,7 +221,7 @@ class JobController extends Controller {
             ));
         } else {
             // Do the business logic
-            $this->jobService->deleteJob($this->jobService->getJobName($job_id));
+            $this->jobService->removeById($this->jobService->retriveJobById($job_id));
 
             $this->addFlash(
                     'notice', 'Job has been deleted'
