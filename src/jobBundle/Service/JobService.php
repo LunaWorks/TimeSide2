@@ -79,11 +79,12 @@ class JobService {
     }
 
     /**
-     * @param jobEntity $job
+     * @param jobEntity $job_id
      * @return bool
      */
-    public function removeById($job) 
+    public function removeJobById($job_id) 
     {
+        $job = $this->retriveJobById($job_id);
         $this->em->remove($job);
         $this->em->flush();
     }

@@ -221,7 +221,7 @@ class JobController extends Controller {
             ));
         } else {
             // Do the business logic
-            $this->jobService->removeById($this->jobService->retriveJobById($job_id));
+            $this->jobService->removeById($job_id);
 
             $this->addFlash(
                     'notice', 'Job has been deleted'
