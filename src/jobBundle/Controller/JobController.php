@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 // For database operations
-use jobBundle\Entity\Entity\jobEntity;
 use Symfony\Component\HttpFoundation\Response;
 // Form types
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -62,7 +61,10 @@ class JobController extends Controller {
      */
     public function addJob(Request $request) {
         // Creating form
-        $form = $this->formGeneration();
+        $form = $this->createFormBuilder()
+                        ->add('name', TextType::class)
+                        ->add('Felvesz', SubmitType::class)
+                        ->getForm();
 
         // Process request into form
         $form->handleRequest($request);
@@ -80,17 +82,7 @@ class JobController extends Controller {
             ));
         }
     }
-
-    /**
-     * @return Form $form
-     */
-    public function formGeneration() {
-        return $this->createFormBuilder()
-                        ->add('name', TextType::class)
-                        ->add('Felvesz', SubmitType::class)
-                        ->getForm();
-    }
-
+    
     /**
      * @param Form $form
      * @return bool
@@ -99,30 +91,6 @@ class JobController extends Controller {
         if ($form->isSubmitted() && $form->isValid()) {
             // Do the business logic
             return $this->jobService->addJob($form);
-        }
-        return false;
-    }
-
-    /**
-     * @param Form $form
-     * @return bool
-     */
-    public function formProcess2($form) {
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Do the business logic
-            return $this->jobService->getJob($form);
-        }
-        return false;
-    }
-
-    /**
-     * @param Form $form, jobEntity $jobs, int $job_id
-     * @return bool
-     */
-    public function formProcess3($form, $jobs) {
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Do the business logic
-            return $this->jobService->updateJob($form, $jobs);
         }
         return false;
     }
@@ -143,19 +111,25 @@ class JobController extends Controller {
                 ->getForm();
         $form->handleRequest($request);
 
-        if ($this->formProcess2($form)) {
+        if ($form->isSubmitted() && $form->isValid()) {
             // Render templates depending on previous actions
             $this->addFlash(
                     'notice', 'Job found'
             );
             // Do the business logic
-            $jobid = $this->jobService->getJobId($form);
-            
+            $jobs = $this->jobService->getJob($form);
+
             // Check if this job exists
-            if ($jobid) {
-                return new Response("ID IS {$jobid[0]->getId()} FOR {$form['name']->getData()}");
+            if ($jobs) {
+                return $this->render(
+                                'job/job_select.html.twig', array(
+                            'jobs' => $jobs
+                ));
             } else {
-                return new Response("There is no result for {$form['name']->getData()}");
+                return $this->render(
+                                'job/job_error.html.twig', array(
+                            'data' => $form['name']->getData()
+                ));
             }
         } else {
             return $this->render(
@@ -185,9 +159,12 @@ class JobController extends Controller {
      */
     public function updateJob(Request $request, $job_id) {
         // If the id doesn't exist in the database
-        if (!$this->jobService->getForUpdate($job_id)) {
+        if (!$this->jobService->findJob($job_id)) {
 
-            return new Response('There is no such an ID ' . $job_id);
+            return $this->render(
+                            'job/job_error.html.twig', array(
+                        'data' => $job_id
+            ));
         } else {
             // Do the business logic
             $jobs = $this->jobService->getJobName($job_id);
@@ -201,10 +178,12 @@ class JobController extends Controller {
 
             $form->handleRequest($request);
             // Do the business logic and check the form
-            if ($this->formProcess3($form, $jobs)) {
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $this->jobService->updateJob($form,$jobs);
 
                 $this->addFlash(
-                        'notice', 'Job found'
+                        'notice', 'Job has been updated'
                 );
                 return $this->redirectToRoute("job_job_getjobs");
             } else {
@@ -235,20 +214,21 @@ class JobController extends Controller {
      * @Route("job/job_delete/{job_id}")
      */
     public function deleteJob($job_id) {
-        if (!$this->jobService->FindJobForDelete($job_id)) {
+        if (!$this->jobService->findJob($job_id)) {
             // If the id doesn't exist in the database
-            return new Response('There is no such an id ' . $job_id);
+            return $this->render(
+                            'job/job_error.html.twig', array(
+                        'data' => $job_id
+            ));
         } else {
             // Do the business logic
-            if ($this->jobService->deleteJob($this->jobService->getJobName($job_id))) {
+            $this->jobService->deleteJob($this->jobService->getJobName($job_id));
 
-                $this->addFlash(
-                        'notice', 'Job found'
-                );
-                // Render templates depending on previous actions
-                return $this->redirectToRoute("job_job_getjobs");
-            }
+            $this->addFlash(
+                    'notice', 'Job has been deleted'
+            );
+            // Render templates depending on previous actions
+            return $this->redirectToRoute("job_job_getjobs");
         }
     }
-
 }

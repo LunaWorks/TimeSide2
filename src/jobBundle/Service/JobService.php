@@ -19,11 +19,13 @@ class JobService {
      *
      * @param EntityManagerInterface $em
      */
-    public function __construct(EntityManagerInterface $em) {
+    public function __construct(EntityManagerInterface $em) 
+    {
         $this->em = $em;
     }
 
-    public function getAllJobs() {
+    public function getAllJobs() 
+    {
         return $this->em
                         ->getRepository(jobEntity::class)
                         ->findAll();
@@ -33,7 +35,8 @@ class JobService {
      * @param Form $form
      * @return bool
      */
-    public function addJob(Form $form) {
+    public function addJob(Form $form)
+    {
         $success = false;
         if ($form->isSubmitted() && $form->isValid()) {
             $job = new jobEntity();
@@ -48,22 +51,10 @@ class JobService {
 
     /**
      * @param Form $form
-     * @return bool
-     */
-    public function getJob(Form $form) {
-        $success = false;
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->getRepository(jobEntity::class)->findBy(['name' => $form['name']->getData()]);
-            $success = true;
-        }
-        return $success;
-    }
-
-    /**
-     * @param Form $form
      * @return jobEntity
      */
-    public function getJobId(Form $form) {
+    public function getJob(Form $form) 
+    {
         return $this->em->getRepository(jobEntity::class)->findBy(['name' => $form['name']->getData()]);
     }
 
@@ -71,49 +62,30 @@ class JobService {
      * @param int $job_id
      * @return jobEntity
      */
-    public function getJobName($job_id) {
+    public function getJobName($job_id) 
+    {
         return $this->em->getRepository(jobEntity::class)->find($job_id);
-    }
-
-    /**
-     * @param int $job_id
-     * @return bool
-     */
-    public function getForUpdate($job_id) {
-        $jobs = $this->em
-                ->getRepository(jobEntity::class)
-                ->find($job_id);
-        if ($jobs) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**
      * @param Form $form , jobEntity $jobs
      * @return bool
      */
-    public function updateJob(Form $form, $jobs) {
-        $success = false;
-        if ($form->isSubmitted() && $form->isValid()) {
+    public function updateJob($form, $job) 
+    {
 
-            if ($jobs) {
-                $jobs->setName($form['name']->getData());
-                $this->em->flush();
-                $success = true;
-            }
-        }
-        return $success;
+        $job->setName($form['name']->getData());
+        $this->em->flush();
     }
 
     /**
-     * @param string $name
+     * @param int $id
      * @return bool
      */
-    public function FindJobForDelete($name) {
-        $jobs = $this->em->getRepository(jobEntity::class)->findBy(['id' => $name]);
-        if ($jobs) {
+    public function findJob($id) 
+    {
+        $job = $this->em->getRepository(jobEntity::class)->Find($id);
+        if ($job) {
             return true;
         } else {
             return false;
@@ -124,9 +96,9 @@ class JobService {
      * @param jobEntity $job
      * @return bool
      */
-    public function deleteJob($job) {
+    public function deleteJob($job) 
+    {
         $this->em->remove($job);
         $this->em->flush();
-        return true;
     }
 }
