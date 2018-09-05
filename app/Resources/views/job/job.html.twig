@@ -1,25 +1,55 @@
 {# app/Resources/views/job/job.html.twig #}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <title>Jobs</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="stylesheet" href="css/main.css">
+        <title>Jobs</title>
     </head>
+
     <body>
-        <div class="container">
-            <h2>Jobs</h2> 
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="#">Jobs</a>
 
-            <p>Opciók:</p>     
-            <a href="job/job_select">Listázás</a> </br>
-            <a href="job/job_new">Új adat bevétel</a> </br>
-            <a href="job/job_update">Adat frissítése</a> </br>
-            <a href="job/job_search">keresés</a> </br>
-            <a href="job/job_delete">Törlés</a> </br>
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="job/job_select">Listázás</a> </br>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="job/job_new">Új adat bevétel</a> </br>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="job/job_update">Adat frissítése</a> </br>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled"href="job/job_search">keresés</a> </br>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="job/job_delete">Törlés</a> </br>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
 
-        </div>
+        <main role="main" class="container">
+            <div class="starter-template">
+                <h1>Jobs</h1>
+                <p class="lead">Storing jobs into database.</p>
+            </div>
+        </main>
     </body>
 </html>
